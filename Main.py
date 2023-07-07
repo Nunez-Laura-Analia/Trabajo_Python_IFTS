@@ -6,6 +6,7 @@ today = date.today()
 now = datetime.now()
 
 # Clases
+
 class Vehiculo:
     def __init__(self, marca: str, modelo: str, patente: str, kmActual: int, ultKm: int, ultAceite: int, ultCorrea: int, ultBujia: int, ultNeumatico: int, respuesta: int, ultVtv: int):
         self.marca = marca
@@ -153,23 +154,23 @@ listaDeAutos = [Auto1, Auto2, Auto3, Auto4]
 lista = [Loyola1, Maciel1, Gajardo1, Velazquez1]
 
 # INICIO DEL PROGRAMA
-def pregunta(apellido1):
-    if apellido1 == Loyola1.apellido:
+def pregunta(apellido):
+    if apellido == Loyola1.apellido:
         print("Bienvenido ", Loyola1.nombre)
         kmAct1 = Auto1.obtener_km_actual()
         kmUlt1 = Auto1.obtener_ultimo_km()
         return kmAct1, kmUlt1
-    elif apellido1 == Maciel1.apellido:
+    elif apellido == Maciel1.apellido:
         print("Bienvenido ", Maciel1.nombre)
         kmAct2 = Auto2.obtener_km_actual()
         kmUlt2 = Auto2.obtener_ultimo_km()
         return kmAct2, kmUlt2
-    elif apellido1 == Gajardo1.apellido:
+    elif apellido == Gajardo1.apellido:
         print("Bienvenido ", Gajardo1.nombre)
         kmAct3 = Auto3.obtener_km_actual()
         kmUlt3 = Auto3.obtener_ultimo_km()
         return kmAct3, kmUlt3
-    elif apellido1 == Velazquez1.apellido:
+    elif apellido == Velazquez1.apellido:
         print("Bienvenido ", Velazquez1.nombre)
         kmAct4 = Auto4.obtener_km_actual()
         kmUlt4 = Auto4.obtener_ultimo_km()
@@ -177,6 +178,13 @@ def pregunta(apellido1):
     else:
         return print("Ingreso mal el apellido")
 
+def auto_elegido(listaDeAutos, vehiculo_elegido):
+    if vehiculo_elegido > 4:
+        return "Ha ocurrido un error."
+    else:
+        vehiculo_elegido = listaDeAutos[vehiculo_elegido] - 1
+        return vehiculo_elegido
+    
 def opciones(auto):
     arranque = True
     while arranque:
@@ -229,26 +237,35 @@ def correrGasto(auto):
             arranque = False
 
 
-apellido1 = input("Ingrese su APELLIDO:")
-pregunta(apellido1)
+apellido = input("Ingrese su APELLIDO:")
+pregunta(apellido)
+
+vehiculo_elegido = int(input("Ingrese el numero de auto que desea ver. Por ejemplo si es el auto uno, inglrese 1: "))
+auto = auto_elegido(listaDeAutos, vehiculo_elegido)
+
+opciones(auto)
+
+correrGasto(auto)
 
 # INICIACION PARA LA CONSOLA
-for n in lista:
-    n = apellido1
-    if apellido1 == Loyola1.apellido:
-        a = pregunta(Auto1)
-        b = correrGasto(Gasto1)
-        c = opciones(Auto1)
-    elif apellido1 == Maciel1.apellido:
-        a = pregunta(Gasto2)
-        b = correrGasto(Auto2)
-        c = opciones(Auto2)
-    elif apellido1 == Velazquez1.apellido:
-        a = pregunta(Auto4)
-        b = correrGasto(Gasto4)
-        c = opciones(Auto3)
-    elif apellido1 == Gajardo1.apellido:
-        a = pregunta(Auto3)
-        b = correrGasto(Gasto3)
-        c = opciones(Auto4)
-    break
+# for n in lista:
+#     n = apellido1
+#     if apellido1 == Loyola1.apellido:
+#         a = pregunta(Auto1)
+#         b = correrGasto(Gasto1)
+#         c = opciones(Auto1)
+#     elif apellido1 == Maciel1.apellido:
+#         a = pregunta(Gasto2)
+#         b = correrGasto(Auto2)
+#         c = opciones(Auto2)
+#     elif apellido1 == Velazquez1.apellido:
+#         a = pregunta(Auto4)
+#         b = correrGasto(Gasto4)
+#         c = opciones(Auto3)
+#     elif apellido1 == Gajardo1.apellido:
+#         a = pregunta(Auto3)
+#         b = correrGasto(Gasto3)
+#         c = opciones(Auto4)
+#     break
+
+         
