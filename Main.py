@@ -5,10 +5,9 @@ import math
 today = date.today()
 now = datetime.now()
 
-# Clases
-
+# Clases 
 class Vehiculo:
-    def __init__(self, marca: str, modelo: str, patente: str, kmActual: int, ultKm: int, ultAceite: int, ultCorrea: int, ultBujia: int, ultNeumatico: int, respuesta: int, ultVtv: int):
+    def __init__(self, marca: str, modelo: str, patente: str, kmActual: int, ultKm: int, ultAceite: int, ultCorrea: int, ultBujia: int, ultNeumatico: int, ultVtv: int):
         self.marca = marca
         self.modelo = modelo
         self.patente = patente
@@ -18,10 +17,8 @@ class Vehiculo:
         self.ultCorrea = ultCorrea
         self.ultBujia = ultBujia
         self.ultNeumatico = ultNeumatico
-        self.respuesta = respuesta
         self.ultVtv = ultVtv
-        super().__init__(kmActual)
-
+        
     def obtener_km_actual(self):
         return self.kmActual
 
@@ -30,66 +27,57 @@ class Vehiculo:
         self.kmActual = self.ultKm
         return self.kmAnterior, self.kmActual
 
-    def obtener_ultimo_cambio_aceite(self):
-        self.valorAceite = 20000
-        self.proxAceite = self.ultAceite + 10000
-        self.tiempoAceite = self.proxAceite - self.kmActual
+    def proximo_cambio_aceite(self):
+        # se suma el kilometraje del dia del ultimo cambio de aceite y 10000, que es la cantidad de km que dura el cambio de aceite.
+        tope_de_duracion = self.ultAceite + 10000
+        # Se resta el total de km que puede recorrer el vehiculo con el anterior cambio de aceite, con la cantidad de km que tiene actualemte.
+        tiempo_restante = tope_de_duracion - self.kmActual
 
-        if self.kmActual < self.proxAceite:
-            return "Para su proximo cambio de haciente le falta recorrer: ", self.tiempoAceite, "km. El proximo cambio de aceite seran: $", self.valorAceite
+        if self.kmActual < tope_de_duracion:
+            return "Su proximo cambio de aceite es a los: ", tope_de_duracion, "km y falta recorrer ", tiempo_restante, "."
         else:
-            self.tiempo_Aceite = self.proxAceite - self.kmActual
-            return self.tiempoAceite
+            return "Se paso del cambio de aceite hace: ", tiempo_restante, "km."
 
-    def calcular_recorrido(self):
-        self.diferencia = self.kmActual - self.kmAnterior
-        self.diario = self.diferencia / 25
-        return "Por mes realiza un estimado de ", self.diferencia, "km al mes. Los km recorrido diarios son :", self.diario, "Km."
+    def proximo_cambio_correa(self):
+        tope_de_duracion = self.ultCorrea + 60000
+        tiempo_restante = tope_de_duracion - self.kmActual
 
-    def obtener_ultimo_cambio_correa(self):
-        self.valorCorrea = 80000
-        self.proxCorrea = self.ultCorrea + 60000
-        self.tiempoCorrea = self.proxCorrea - self.kmActual
-
-        if self.kmActual < self.proxCorrea:
-            return "El proximo cambio de correas es a los ", self.proxCorrea, "km y le faltan ", self.tiempoCorrea, "km. Tiene un valor de $", self.valorCorrea, "."
+        if self.kmActual < tope_de_duracion:
+            return "El proximo cambio de correas es a los ", tope_de_duracion, "km y le faltan ", tiempo_restante, "."
         else:
-            return "Se paso el cambio de correas hace: ", self.tiempoCorrea, "km."
+            return "Se paso del cambio de correas hace: ", tiempo_restante, "km."
 
-    def obtener_ultimo_cambio_bujia(self):
-        self.valorCable = 40000
-        self.proxBujia = self.ultBujia + 30000
-        self.tiempoBujia = self.proxBujia - self.kmActual
+    def proximo_cambio_bujia(self):
+        tope_de_duracion = self.ultBujia + 30000
+        tiempo_restante = tope_de_duracion - self.kmActual
 
-        if self.kmActual > self.proxBujia:
-            return "Se paso del cambio de bujias ", self.tiempoBujia, "km."
+        if self.kmActual < tope_de_duracion:
+            return "El proximo cambio de bujias es a los: ", tope_de_duracion, "km y le faltan", tiempo_restante, "."
         else:
-            return "Su proximo cambio de bujias es a los ", self.proxBujia, "km y le faltan", self.tiempoBujia, ". Tiene un valor de $", self.valorCable, "."
+            return "Se paso del cambio de bujias hace ", tiempo_restante, "km."
 
     def obtener_ultimo_cambio_neumaticos(self):
-        self.valorNeumatico = 200000
-        self.proxNeumatico = self.ultNeumatico + 50000
-        self.tiempoNeumatico = self.proxNeumatico - self.kmActual
+        tope_de_duracion = self.ultNeumatico + 50000
+        tiempo_restante = tope_de_duracion - self.kmActual
 
-        if self.kmActual < self.proxNeumatico:
-            return "Su proximo cambio de neumaticos es a los ", self.proxNeumatico, "km y le faltan", self.tiempoNeumatico, ". Tiene un valor de $", self.valorNeumatico, "."
+        if self.kmActual < tope_de_duracion:
+            return "El proximo cambio de neumaticos es a los ", tope_de_duracion, "km y le faltan", tiempo_restante, "."
         else:
-            return "Se paso ", self.tiempoNeumatico, "km."
+            return "Se paso del cambio de neumaticos hace ", tiempo_restante, "km."
 
     def realizar_vtv(self):
-        if self.respuesta == 1:
-            self.respuesta = True
-            return self.respuesta
-        elif self.respuesta != 1:
-            self.respuesta = False
+        b = True
+        if b:
+            self.vtv = datetime.strptime(self.ultVtv, "%d/%m/%Y")
+            self.proxVtv = self.ultVtv + timedelta(days=365)
+            return "La proxima vtv, se debe realizar en la fecha: ", self.proxVtv, "."
+        else:
+            return "No ha ingresado una fecha correcta."
 
-        while self.respuesta:
-            try:
-                self.ultVtv = datetime.strptime(self.ultVtv, "%d/%m/%Y")
-                self.proxVtv = self.ultVtv + timedelta(days=365)
-                return "La proxima vtv, se realizara en la fecha: ", self.proxVtv, "."
-            except:
-                return "No ha ingresado una fecha correcta."
+    def calcular_recorrido(self):
+        estimativo_recorrido_por_mes = self.kmAnterior
+        estimativo_por_dia = self.kmAnterior / 30
+        return "Por mes realiza un estimativo de ", estimativo_recorrido_por_mes, "km. El estimativo de km recorridos por dia son de: ", estimativo_por_dia, "."
 
 
 class Supervisor:
@@ -100,42 +88,50 @@ class Supervisor:
 
 
 class Gastos(Vehiculo):
-    def _init_(self, kmActual):
-        super().__init__(kmActual)
-
-    def gastosAuto(self):
+    def __init__(self, precioAceite: int, precioCorrea: int, precioBujia: int, precioNeumatico: int):
+        self.precioAceite = precioAceite
+        self.precioCorrea = precioCorrea
+        self.precioBujia = precioBujia
+        self.precioNeumatico = precioNeumatico
+        self.mantenimiento = ["aceite", "correa", "bujia", "neumaticos"]
         self.gastos = []
 
     def historialAceite(self):
-        self.aceiteHistorico = math.floor(self.kmActual / 10000)
-        self.precioAceite = self.aceiteHistorico * 20000
-        return "Hasta el momento solo con el aceite gasto: $", self.precioAceite, "."
+        # Dividimos la cantidad total de kilometros del vehiculo por 10000, que es la duracion en km de cada cambio de aceite.
+        # Asi obtenemos el total de cambios de aceite realizados hasta el momento.
+        aceiteHistorico = math.floor(self.kmActual / 10000)
+        # Multiplicamos el total de cambios por el valor del aceite, y obtenemos el gasto total del vehiculo en el mismo.
+        valorAceite = aceiteHistorico * self.precioAceite
+        self.gastos.append(valorAceite)
 
     def historialCorrea(self):
-        self.correaHistorico = math.floor(self.kmActual / 60000)
-        self.precioCorrea = self.correaHistorico * 80000
-        return "Hasta el momento solo con la correa gasto: $", self.precioCorrea, "."
+        correaHistorico = math.floor(self.kmActual / 60000)
+        valorCorrea = correaHistorico * self.precioCorrea
+        self.gastos.append(valorCorrea)
 
     def historialBujia(self):
-        self.bujiaHistorico = math.floor(self.kmActual / 30000)
-        self.precioBujia = self.bujiaHistorico * 40000
-        return "Hasta el momento solo con la bujia gasto: $", self.precioBujia, "."
+        bujiaHistorico = math.floor(self.kmActual / 30000)
+        valorBujia = bujiaHistorico * self.precioBujia
+        self.gastos.append(valorBujia)
 
     def historialNeumatico(self):
         self.neumaticoHistorico = math.floor(self.kmActual / 50000)
-        self.precioNeumatico = self.neumaticoHistorico * 200000
-        return "Hasta el momento solo con los neumaticos gasto: $", self.precioNeumatico, "."
+        valorNeumatico = self.neumaticoHistorico * self.precioNeumatico
+        self.gastos.append(valorNeumatico)
+
+    def gastos_totales(self):
+        return "El total de los gastos en ", self.mantenimiento[0], " es de ", self.gastos[0], "El total de los gastos en ", self.mantenimiento[1], " es de ", self.gastos[1], "El total de los gastos en ", self.mantenimiento[2], " es de ", self.gastos[2], "El total de los gastos en ", self.mantenimiento[3], " es de ", self.gastos[3]
 
 
 # Ingreso de vehiculos
 Auto1 = Vehiculo("Volkswagen", "Gold Trend", "AB234MK",
-                 50000, 55000, 60, 60, 60, 60, 60, 11/5/2019)
+                 50000, 55000, 30000, 31000, 30500, 29500, 11/5/2019)
 Auto2 = Vehiculo("Renault", "Megane", "OXQ291",
-                 50000, 55000, 60, 60, 60, 60, 60, 15/12/2020)
-Auto3 = Vehiculo("Ford", "Ka", "AA397GS", 40000,
-                 45000, 50, 50, 50, 50, 50, 30/4/2021)
+                 17000, 18000, 15000, 16000, 15500, 15750, 15/12/2020)
+Auto3 = Vehiculo("Ford", "Ka", "AA397GS",
+                 45000, 45500, 35000, 37500, 38000, 38250, 30/4/2021)
 Auto4 = Vehiculo("Chevrolete", "Onix", "AE414MP",
-                 50000, 65000, 70, 70, 70, 70, 70, 15/11/2022)
+                 50000, 65000, 49000, 49500, 49750, 49800, 15/11/2022)
 
 # Ingreso de supervisores
 Loyola1 = Supervisor("Eduardo", "loyola", Auto1)
@@ -143,17 +139,18 @@ Maciel1 = Supervisor("Claudio", "maciel", Auto2)
 Gajardo1 = Supervisor("Lucciano", "gajardo", Auto3)
 Velazquez1 = Supervisor("Jorge", "velazquez", Auto4)
 
-# Ingreo de gastos
-Gasto1 = Gastos(Auto1)
-Gasto2 = Gastos(Auto2)
-Gasto3 = Gastos(Auto3)
-Gasto4 = Gastos(Auto4)
+# Ingreso de gastos
+gasto1 = Gastos(Auto1, 20000, 80000, 46000, 190000)
+gasto2 = Gastos(Auto2, 15000, 60000, 45000, 200000)
+gasto3 = Gastos(Auto3, 25000, 70000, 50000, 150000)
+gasto4 = Gastos(Auto4, 21000, 90000, 48000, 250000)
 
 # Lista de autos y supervisores
 listaDeAutos = [Auto1, Auto2, Auto3, Auto4]
 lista = [Loyola1, Maciel1, Gajardo1, Velazquez1]
 
 # INICIO DEL PROGRAMA
+
 def pregunta(apellido):
     if apellido == Loyola1.apellido:
         print("Bienvenido ", Loyola1.nombre)
@@ -178,13 +175,6 @@ def pregunta(apellido):
     else:
         return print("Ingreso mal el apellido")
 
-def auto_elegido(listaDeAutos, vehiculo_elegido):
-    if vehiculo_elegido > 4:
-        return "Ha ocurrido un error."
-    else:
-        vehiculo_elegido = listaDeAutos[vehiculo_elegido] - 1
-        return vehiculo_elegido
-    
 def opciones(auto):
     arranque = True
     while arranque:
@@ -203,7 +193,7 @@ def opciones(auto):
         elif opcion == 2:
             auto.obtener_ultimo_cambio_aceite()
         elif opcion == 3:
-            auto.btener_ultimo_cambio_correa()
+            auto.obtener_ultimo_cambio_correa()
         elif opcion == 4:
             auto.obtener_ultimo_cambio_bujia()
         elif opcion == 5:
@@ -214,6 +204,7 @@ def opciones(auto):
             auto.calcular_recorrido()
         elif opcion == 8:
             arranque = False
+
 
 def correrGasto(auto):
     arranque = True
@@ -237,35 +228,25 @@ def correrGasto(auto):
             arranque = False
 
 
-apellido = input("Ingrese su APELLIDO:")
-pregunta(apellido)
-
-vehiculo_elegido = int(input("Ingrese el numero de auto que desea ver. Por ejemplo si es el auto uno, inglrese 1: "))
-auto = auto_elegido(listaDeAutos, vehiculo_elegido)
-
-opciones(auto)
-
-correrGasto(auto)
+apellido = input("Ingrese su Apellido:")
 
 # INICIACION PARA LA CONSOLA
-# for n in lista:
-#     n = apellido1
-#     if apellido1 == Loyola1.apellido:
-#         a = pregunta(Auto1)
-#         b = correrGasto(Gasto1)
-#         c = opciones(Auto1)
-#     elif apellido1 == Maciel1.apellido:
-#         a = pregunta(Gasto2)
-#         b = correrGasto(Auto2)
-#         c = opciones(Auto2)
-#     elif apellido1 == Velazquez1.apellido:
-#         a = pregunta(Auto4)
-#         b = correrGasto(Gasto4)
-#         c = opciones(Auto3)
-#     elif apellido1 == Gajardo1.apellido:
-#         a = pregunta(Auto3)
-#         b = correrGasto(Gasto3)
-#         c = opciones(Auto4)
-#     break
-
-         
+for n in lista:
+    n = apellido
+    if apellido == Loyola1.apellido:
+        a = pregunta(Auto1)
+        b = correrGasto(Gasto1)
+        c = opciones(Auto1)
+    elif apellido == Maciel1.apellido:
+        a = pregunta(Auto2)
+        b = correrGasto(Gasto2)
+        c = opciones(Auto2)
+    elif apellido == Velazquez1.apellido:
+        a = pregunta(Auto4)
+        b = correrGasto(Gasto3)
+        c = opciones(Auto3)
+    elif apellido == Gajardo1.apellido:
+        a = pregunta(Auto3)
+        b = correrGasto(Gasto4)
+        c = opciones(Auto4)
+    break
